@@ -15,7 +15,7 @@ M.options = {
 }
 
 --- list of known and common scheme ports
--- as documented in <a href="https://www.iana.org/assignments/uri-schemes.html">IANA URI scheme list</a>
+-- as documented in <a href="http://www.iana.org/assignments/uri-schemes.html">IANA URI scheme list</a>
 M.services = {
 	acap     = 674,
 	cap      = 1026,
@@ -432,7 +432,7 @@ function M:resolve(other)
 end
 
 --- normalize a url path following some common normalization rules
--- described on <a href="https://en.wikipedia.org/wiki/URL_normalization">The URL normalization page of Wikipedia</a>
+-- described on <a href="http://en.wikipedia.org/wiki/URL_normalization">The URL normalization page of Wikipedia</a>
 -- @return the normalized path
 function M:normalize()
 	if type(self) == 'string' then

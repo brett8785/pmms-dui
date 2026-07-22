@@ -19,7 +19,7 @@ local blockSize = 131072
 -- Maximum number of bytes to send in one ranged response
 local maxContentLength = 5242880
 
-function createHttpHandler(options)
+local function createHttpHandler(options)
 	local resourceName = GetInvokingResource() or GetCurrentResourceName()
 	local resourcePath = GetResourcePath(resourceName)
 
@@ -315,6 +315,16 @@ function createHttpHandler(options)
 		return statusCode
 	end
 
+	local function readBody(req)
+		local p = promise.new()
+
+		req.setDataHandler(function(body)
+			p:resolve(body)
+		end)
+
+		return p
+	end
+
 	local function readJson(req)
 		local p = promise.new()
 
@@ -430,6 +440,10 @@ function createHttpHandler(options)
 			local matches = {url.path:match(pattern)}
 
 			if #matches > 0 then
+				req.readBody = function()
+					return readBody(req)
+				end
+
 				req.readJson = function()
 					return readJson(req)
 				end
@@ -516,3 +530,24 @@ exports("getUrl", function(resourceName)
 
 	return ("%s://%s/%s/"):format(protocol, endpoint, resourceName)
 end)
+
+-- Apply inheritance for realms
+for realm, users in pairs(Realms) do
+	if users.inherit and Realms[users.inherit] then
+		local inheritedRealms
+
+		if type(users.inherit) == "table" then
+			inheritedRealms = users.inherit
+		else
+			inheritedRealms = {users.inherit}
+		end
+
+		for _, inheritedRealm in ipairs(inheritedRealms) do
+			for username, password in pairs(Realms[inheritedRealm]) do
+				users[username] = password
+			end
+		end
+
+		users.inherit = nil
+	end
+end

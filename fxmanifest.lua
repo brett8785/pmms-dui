@@ -1,21 +1,17 @@
-fx_version 'bodacious'
-games { 'gta5' }
+fx_version "cerulean"
+game "common"
 
-author 'JordanZABOT'
-description 'A script which will allow you to host your own DUI for pmms'
-version '1.0.0'
-
-server_only 'yes'
+name "httpmanager"
+author "kibukj"
+description "HTTP handler library for FiveM and RedM"
+repository "https://github.com/kibook/httpmanager"
 
 server_scripts {
-    "url.lua",
-    "mime.lua",
-    "httphandler.lua",
-    'server.lua'
+	"url.lua",
+	"mime.lua",
+	"base64.lua",
+	"hash.lua",
+	"realms.lua",
+	"httphandler.lua",
+	"main.lua"
 }
-
-dependencies {
-    'pmms'
-}
-
-
